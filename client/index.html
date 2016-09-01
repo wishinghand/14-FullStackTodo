@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To-do List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <!-- inject:css -->
+    <link rel="stylesheet" href="build/build.css">
+    <!-- endinject -->
+</head>
+<body ng-app="app" class="container is-fluid" ng-controller="TodoCtrl as todos">
+    <div class="columns">
+        <div class="content column" >
+                <h1>Add a To-do Item</h1>
+                <form>
+                    <label for="textInput" class="label">Enter a to-do item</label>
+                    <!-- ng-model has `todo` prefix for namespacing reasons -->
+                    <input ng-model="todos.todo.description" type="text" class="input" id="textInput" placeholder="Buy groceries">
+
+                    <label for="priorityInput" class="label">Priority</label>
+                    <select ng-model="todos.todo.priority" class="select" id="priorityInput">
+                        <option disabled selected value>- select a priority --</option>
+                        <option value="1">High Priority</option>
+                        <option value="2">Medium Priority</option>
+                        <option value="3">Low Priority</option>
+                    </select>
+
+                  <button type="submit" class="button is-success" ng-click="todos.addTodo(todos.todo)">Add Item</button>
+                </form>
+        </div>
+
+        <div class="column content">
+            <h1>Tasks</h1>
+            <!-- ng-click changes priority defintion, but not sure how it works without object prefix -->
+            <button ng-click="sortOrder='+priority';" class="button is-danger">
+                Order by Highest Priority
+            </button>
+            <button ng-click="sortOrder='-priority';" class="button is-success">
+                Order by Lowest Priority
+            </button>
+            <button ng-click="sortOrder='text';" class="button is-info">
+                Order Alphabetically
+            </button>
+
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Priority</th>
+                    <th width="15%">Manage</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr ng-repeat="todo in todos.todos">
+                    <td>
+                      <span ng-hide="todo.edit">
+                        {{todo.description}}  
+                      </span>
+                      <span ng-show="todo.edit">
+                        <input type="text" class="input" ng-model="todo.description">
+                      </span>
+                    </td>
+                    <td>
+                      <span ng-hide="todo.edit">
+                        {{todo.priority}}
+                      </span>
+                      <span ng-show="todo.edit">
+                      <span class="select">
+                        <select ng-model="todo.priority">
+                          <option value="">Select priority</option>
+                          <option value="1">High Priority</option>
+                          <option value="2">Medium Priority</option>
+                          <option value="3">Low Priority</option>
+                        </select>
+                      </span>
+                      </span>
+                    </td>
+                    <td>
+                      <span ng-hide="todo.edit">
+                        <button class="button is-primary" ng-click="todo.edit = true;"><i class="fa fa-edit"></i></button>
+                        <button class="button is-danger" ng-click="todos.deleteTodo(todo);"><i class="fa fa-trash"></i></button>
+                      </span>
+                      <span ng-show="todo.edit">
+                        <button class="button is-primary" ng-click="todos.editTodo(todo)"><i class="fa fa-save"></i></button>
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <!-- inject:js -->
+    <script src="build/build.js"></script>
+    <!-- endinject -->
+</body>
+</html>
